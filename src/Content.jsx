@@ -9,6 +9,7 @@ import { Modal } from "./Modal";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { LogoutLink } from "./LogoutLink";
+import { Footer } from "./Footer";
 import { Routes, Route } from "react-router-dom";
 
 export function Content() {
@@ -19,7 +20,7 @@ export function Content() {
 
   const handleIndexBreweries = () => {
     console.log("handleIndexBreweries");
-    axios.get("https://api.openbrewerydb.org/v1/breweries?per_page=20").then((response) => {
+    axios.get("https://api.openbrewerydb.org/v1/breweries/random?size=50").then((response) => {
       console.log(response.data);
       setBreweries(response.data);
     });
@@ -64,23 +65,22 @@ export function Content() {
 
   return (
     <main className="container">
-      {/* <Signup />
-      <Login /> */}
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<BreweriesIndex breweries={breweries} onShowBrewery={handleShowBrewery} />} />
+        <Route
+          path="/"
+          element={<BreweriesIndex breweries={breweries} favorites={favorites} onShowBrewery={handleShowBrewery} />}
+        />
         <Route path="/breweries/:id" element={<BreweriesShowPage />} />
         <Route
           path="/favorites"
           element={<FavoritesIndex favorites={favorites} onDestroyFavorite={handleDestroyFavorite} />}
         />
-        <Route path="/logout" element={<LogoutLink />} />
       </Routes>
       {/* <Modal show={isBreweriesShowVisible} onClose={handleClose}>
           <BreweriesShow brewery={currentBrewery} />
         </Modal> */}
-      <LogoutLink />
     </main>
   );
 }

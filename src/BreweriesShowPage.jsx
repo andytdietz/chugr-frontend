@@ -26,8 +26,12 @@ export function BreweriesShowPage() {
       <div className="row">
         <div className="col">
           <h2>{brewery.name}</h2>
-          <h3>{brewery.city}</h3>
-          <p>Type: {brewery.brewery_type}</p>
+          <h3>
+            {brewery.city}, {brewery.state}
+          </h3>
+          <p>
+            Type: <span style={{ textTransform: "capitalize" }}>{brewery.brewery_type}</span>
+          </p>
           <p>
             <a href={brewery.website_url} className="btn btn-primary me-2">
               Brewery Website
