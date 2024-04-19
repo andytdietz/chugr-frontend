@@ -16,7 +16,12 @@ export function FavoritesIndex(props) {
           <h3>{favorite.city}</h3>
           <p>Brewery Type: {favorite.type}</p>
           <p>Brewery Website: {favorite.website}</p>
-          <img src={favorite.image} alt={favorite.name} />
+          <img
+            src={
+              "https://res.cloudinary.com/teepublic/image/private/s--n_CzDog2--/t_Resized%20Artwork/c_fit,g_north_west,h_954,w_954/co_191919,e_outline:48/co_191919,e_outline:inner_fill:48/co_ffffff,e_outline:48/co_ffffff,e_outline:inner_fill:48/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg"
+            }
+            alt={favorite.name}
+          />
           <button onClick={() => handleClick(favorite.id)}>Remove Favorite</button>
         </div>
       ))}

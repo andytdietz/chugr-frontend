@@ -19,7 +19,7 @@ export function Content() {
 
   const handleIndexBreweries = () => {
     console.log("handleIndexBreweries");
-    axios.get("http://localhost:3000/breweries.json").then((response) => {
+    axios.get("https://api.openbrewerydb.org/v1/breweries?per_page=20").then((response) => {
       console.log(response.data);
       setBreweries(response.data);
     });
@@ -63,12 +63,12 @@ export function Content() {
   useEffect(handleIndexFavorites, []);
 
   return (
-    <main>
-      <Signup />
-      <Login />
+    <main className="container">
+      {/* <Signup />
+      <Login /> */}
       <Routes>
-        {/* <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} /> */}
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<BreweriesIndex breweries={breweries} onShowBrewery={handleShowBrewery} />} />
         <Route path="/breweries/:id" element={<BreweriesShowPage />} />
         <Route

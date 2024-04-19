@@ -37,20 +37,41 @@ export function BreweriesIndex(props) {
 
   return (
     <div>
-      <h1>All Breweries</h1>
-      {props.breweries.map((brewery) => (
-        <div key={brewery.id}>
-          <h2>{brewery.name}</h2>
-          <h3>{brewery.city}</h3>
-          <img src={brewery.image_url} alt={brewery.name} />
-          <Link to={`/breweries/${brewery.id}`}>
-            <button onClick={() => props.onShowBrewery(brewery)}>More Info</button>
-          </Link>
-          <button onClick={() => handleFavoriteClick(brewery.id)} disabled={isBreweryFavorited(brewery.id)}>
-            ♥️
-          </button>
-        </div>
-      ))}
+      <h1 className="col-12">All Breweries</h1>
+      <div className="row row-cols-1 row-cols-md-3 g-4">
+        {props.breweries.map((brewery) => (
+          <div key={brewery.id} className="col">
+            <div className="card">
+              <img
+                src={
+                  "https://res.cloudinary.com/teepublic/image/private/s--n_CzDog2--/t_Resized%20Artwork/c_fit,g_north_west,h_954,w_954/co_191919,e_outline:48/co_191919,e_outline:inner_fill:48/co_ffffff,e_outline:48/co_ffffff,e_outline:inner_fill:48/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg"
+                }
+                className="card-img-top"
+                alt={brewery.name}
+                style={{ height: "200px", objectFit: "cover" }}
+              />
+              <div className="card-body">
+                <h5 className="card-title">{brewery.name}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">{brewery.city}</h6>
+                <Link
+                  to={`/breweries/${brewery.id}`}
+                  className="btn btn-primary me-2"
+                  onClick={() => props.onShowBrewery(brewery)}
+                >
+                  More Info
+                </Link>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => handleFavoriteClick(brewery.id)}
+                  disabled={isBreweryFavorited(brewery.id)}
+                >
+                  Favorite
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
