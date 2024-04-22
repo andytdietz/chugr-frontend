@@ -58,6 +58,11 @@ export function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link className="nav-link" to="/nearby" onClick={() => setIsSignupVisible(false)}>
+                      Nearby Breweries
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/logout" className="nav-link" onClick={handleLogout}>
                       Logout
                     </Link>

@@ -8,6 +8,7 @@ import { BreweriesShowPage } from "./BreweriesShowPage";
 import { Modal } from "./Modal";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
+import NearbyBreweries from "./NearbyBreweries";
 import { LogoutLink } from "./LogoutLink";
 import { Footer } from "./Footer";
 import { Routes, Route } from "react-router-dom";
@@ -20,7 +21,7 @@ export function Content() {
 
   const handleIndexBreweries = () => {
     console.log("handleIndexBreweries");
-    axios.get("https://api.openbrewerydb.org/v1/breweries/random?size=5000").then((response) => {
+    axios.get("https://api.openbrewerydb.org/v1/breweries/random?size=50").then((response) => {
       console.log(response.data);
       setBreweries(response.data);
     });
@@ -77,6 +78,7 @@ export function Content() {
           path="/favorites"
           element={<FavoritesIndex favorites={favorites} onDestroyFavorite={handleDestroyFavorite} />}
         />
+        <Route path="/nearby" element={<NearbyBreweries />} />
       </Routes>
       {/* <Modal show={isBreweriesShowVisible} onClose={handleClose}>
           <BreweriesShow brewery={currentBrewery} />
