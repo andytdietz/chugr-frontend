@@ -20,7 +20,7 @@ export function Content() {
 
   const handleIndexBreweries = () => {
     console.log("handleIndexBreweries");
-    axios.get("https://api.openbrewerydb.org/v1/breweries/random?size=50").then((response) => {
+    axios.get("https://api.openbrewerydb.org/v1/breweries/random?size=5000").then((response) => {
       console.log(response.data);
       setBreweries(response.data);
     });

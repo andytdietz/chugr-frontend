@@ -22,15 +22,11 @@ export function Header() {
       </Modal>
       <header style={{ paddingTop: "75px", paddingBottom: "15px" }}>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-          {" "}
-          {/* Add fixed-top class */}
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
               ChugR
             </Link>
             <ul className="navbar-nav me-auto">
-              {" "}
-              {/* Move links to the left */}
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/" onClick={() => setIsSignupVisible(false)}>
                   Home
@@ -50,22 +46,24 @@ export function Header() {
                   </li>
                 </>
               ) : (
-                <li className="nav-item">
-                  <Link to="/logout" className="nav-link" onClick={handleLogout}>
-                    Logout
-                  </Link>
-                </li>
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/" onClick={() => setIsSignupVisible(false)}>
+                      All Breweries
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/favorites" onClick={() => setIsSignupVisible(false)}>
+                      My Favorites
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/logout" className="nav-link" onClick={handleLogout}>
+                      Logout
+                    </Link>
+                  </li>
+                </>
               )}
-              <li className="nav-item">
-                <Link className="nav-link" to="/" onClick={() => setIsSignupVisible(false)}>
-                  All Breweries
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/favorites" onClick={() => setIsSignupVisible(false)}>
-                  My Favorites
-                </Link>
-              </li>
             </ul>
           </div>
         </nav>
