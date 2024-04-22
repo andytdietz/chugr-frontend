@@ -60,8 +60,11 @@ const NearbyBreweries = () => {
   // Function to generate directions URL
   const getDirectionsURL = (brewery) => {
     const destination = encodeURIComponent(`${brewery.latitude},${brewery.longitude}`);
-    return `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${destination}&key=${
+      import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY
+    }`;
   };
+  console.log("API Key:", import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY);
 
   return (
     <div className="container">
@@ -86,7 +89,11 @@ const NearbyBreweries = () => {
                     </p>
                     <a href={getDirectionsURL(brewery)} target="_blank" rel="noopener noreferrer">
                       <img
-                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${brewery.latitude},${brewery.longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${brewery.latitude},${brewery.longitude}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`}
+                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${brewery.latitude},${
+                          brewery.longitude
+                        }&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${brewery.latitude},${
+                          brewery.longitude
+                        }&key=${import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY}`}
                         alt={`Map of ${brewery.name}`}
                         className="img-fluid"
                       />

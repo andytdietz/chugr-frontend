@@ -1,3 +1,4 @@
+import React from "react";
 import { LogoutLink } from "./LogoutLink";
 
 export function Footer() {

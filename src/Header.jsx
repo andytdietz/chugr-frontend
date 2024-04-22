@@ -1,3 +1,4 @@
+import React from "react";
 import { Modal } from "./Modal";
 import { Signup } from "./Signup";
 import { useState } from "react";
