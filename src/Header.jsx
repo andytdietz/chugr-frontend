@@ -50,7 +50,7 @@ export function Header() {
                 <>
                   <li className="nav-item">
                     <Link className="nav-link" to="/" onClick={() => setIsSignupVisible(false)}>
-                      All Breweries
+                      Nearby Breweries
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -59,8 +59,8 @@ export function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/nearby" onClick={() => setIsSignupVisible(false)}>
-                      Nearby Breweries
+                    <Link className="nav-link" to="/all" onClick={() => setIsSignupVisible(false)}>
+                      All Breweries
                     </Link>
                   </li>
                   <li className="nav-item">

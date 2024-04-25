@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const NearbyBreweries = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [nearbyBreweries, setNearbyBreweries] = useState([]);
+  const [favoritedBreweries, setFavoritedBreweries] = useState([]);
 
   useEffect(() => {
     // Function to fetch user location from cache or geolocation API
@@ -17,6 +19,14 @@ const NearbyBreweries = () => {
     };
 
     fetchUserLocation();
+  }, []);
+
+  useEffect(() => {
+    // Retrieve favorited brewery IDs from localStorage on component mount
+    const storedFavorites = JSON.parse(localStorage.getItem("favoritedBreweries"));
+    if (storedFavorites) {
+      setFavoritedBreweries(storedFavorites);
+    }
   }, []);
 
   useEffect(() => {
@@ -60,11 +70,41 @@ const NearbyBreweries = () => {
   // Function to generate directions URL
   const getDirectionsURL = (brewery) => {
     const destination = encodeURIComponent(`${brewery.latitude},${brewery.longitude}`);
-    return `https://www.google.com/maps/dir/?api=1&destination=${destination}&key=${
-      import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY
-    }`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${destination}&key=`;
   };
-  console.log("API Key:", import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+
+  // Function to handle favorite click
+  const handleFavoriteClick = (brewery) => {
+    const favoriteData = {
+      brewery_id: brewery.id,
+      name: brewery.name,
+      city: brewery.city,
+      state: brewery.state,
+      brewery_type: brewery.brewery_type,
+      website_url: brewery.website_url,
+      longitude: brewery.longitude,
+      latitude: brewery.latitude,
+      address: `${brewery.address_1}, ${brewery.city}, ${brewery.state}`,
+    };
+
+    axios
+      .post("http://localhost:3000/favorites.json", favoriteData)
+      .then((response) => {
+        console.log("Favorite Created:", response.data);
+        // Add the favorited brewery ID to the list
+        const updatedFavorites = [...favoritedBreweries, brewery.id];
+        setFavoritedBreweries(updatedFavorites);
+        // Update localStorage with the updated list of favorited brewery IDs
+        localStorage.setItem("favoritedBreweries", JSON.stringify(updatedFavorites));
+      })
+      .catch((error) => {
+        console.error("Error creating favorite:", error);
+      });
+  };
+
+  const isBreweryFavorited = (breweryId) => {
+    return favoritedBreweries.includes(breweryId);
+  };
 
   return (
     <div className="container">
@@ -83,17 +123,15 @@ const NearbyBreweries = () => {
               <div key={brewery.id} className="col">
                 <div className="card">
                   <div className="card-body">
-                    <h5 className="card-title">{brewery.name}</h5>
+                    <h5 className="card-title">
+                      <Link to={`/breweries/${brewery.id}`}>{brewery.name}</Link>
+                    </h5>
                     <p className="card-text">
                       {brewery.city}, {brewery.state}
                     </p>
                     <a href={getDirectionsURL(brewery)} target="_blank" rel="noopener noreferrer">
                       <img
-                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${brewery.latitude},${
-                          brewery.longitude
-                        }&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${brewery.latitude},${
-                          brewery.longitude
-                        }&key=${import.meta.env.REACT_APP_GOOGLE_MAPS_API_KEY}`}
+                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${brewery.latitude},${brewery.longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${brewery.latitude},${brewery.longitude}&key=`}
                         alt={`Map of ${brewery.name}`}
                         className="img-fluid"
                       />
@@ -101,6 +139,17 @@ const NearbyBreweries = () => {
                     <a href={brewery.website_url} className="btn btn-primary me-2">
                       Brewery Website
                     </a>
+                    <button
+                      className={`btn btn-secondary bg-transparent border-0`}
+                      onClick={() => handleFavoriteClick(brewery)}
+                      disabled={isBreweryFavorited(brewery.id)}
+                    >
+                      <i
+                        className={`bi ${
+                          isBreweryFavorited(brewery.id) ? "bi-heart-fill text-danger fs-4" : "bi-heart text-black fs-4"
+                        }`}
+                      ></i>
+                    </button>
                   </div>
                 </div>
               </div>

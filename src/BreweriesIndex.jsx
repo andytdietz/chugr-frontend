@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -16,6 +14,20 @@ export function BreweriesIndex(props) {
     }
   }, []);
 
+  useEffect(() => {
+    // Fetch breweries data
+    fetchBreweries();
+  }, []); // Empty dependency array to ensure it only runs once on mount
+
+  const fetchBreweries = async () => {
+    try {
+      const response = await axios.get("https://api.openbrewerydb.org/v1/breweries");
+      props.setBreweries(response.data); // Update parent component state with fetched breweries
+    } catch (error) {
+      console.error("Error fetching breweries:", error);
+    }
+  };
+
   const handleFavoriteClick = (brewery) => {
     const favoriteData = {
       brewery_id: brewery.id,
@@ -24,6 +36,9 @@ export function BreweriesIndex(props) {
       state: brewery.state,
       brewery_type: brewery.brewery_type,
       website_url: brewery.website_url,
+      longitude: brewery.longitude,
+      latitude: brewery.latitude,
+      address: `${brewery.address_1}, ${brewery.city}, ${brewery.state}`,
     };
 
     axios
@@ -43,6 +58,25 @@ export function BreweriesIndex(props) {
 
   const isBreweryFavorited = (breweryId) => {
     return favoritedBreweries.includes(breweryId);
+  };
+
+  const getStaticMapUrl = (brewery) => {
+    const { latitude, longitude, address_1, city, state } = brewery;
+    if (latitude && longitude) {
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=`;
+    } else if (address_1) {
+      // Use the concatenated address for the static map image if latitude or longitude is null
+      const encodedAddress = encodeURIComponent(`${address_1}, ${city}, ${state}`);
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${encodedAddress}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${encodedAddress}&key=`;
+    } else {
+      // Use a default image if latitude, longitude, and address are null
+      return "https://res.cloudinary.com/teepublic/image/private/s--cL7MR2EB--/c_fit,g_north_west,h_840,w_760/co_191919,e_outline:40/co_191919,e_outline:inner_fill:1/co_ffffff,e_outline:40/co_ffffff,e_outline:inner_fill:1/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg";
+    }
+  };
+
+  const getDirectionsURL = (brewery) => {
+    const destination = encodeURIComponent(`${brewery.latitude},${brewery.longitude}`);
+    return `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
   };
 
   return (
@@ -81,14 +115,14 @@ export function BreweriesIndex(props) {
           .map((brewery) => (
             <div key={brewery.id} className="col">
               <div className="card">
-                <img
-                  src={
-                    "https://res.cloudinary.com/teepublic/image/private/s--n_CzDog2--/t_Resized%20Artwork/c_fit,g_north_west,h_954,w_954/co_191919,e_outline:48/co_191919,e_outline:inner_fill:48/co_ffffff,e_outline:48/co_ffffff,e_outline:inner_fill:48/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg"
-                  }
-                  className="card-img-top"
-                  alt={brewery.name}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
+                <a href={getDirectionsURL(brewery)} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={getStaticMapUrl(brewery)}
+                    className="card-img-top"
+                    alt={`Map of ${brewery.name}`}
+                    style={{ height: "200px", objectFit: "cover" }}
+                  />
+                </a>
                 <div className="card-body">
                   <h5 className="card-title">{brewery.name}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">

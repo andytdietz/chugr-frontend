@@ -71,15 +71,22 @@ export function Content() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/"
-          element={<BreweriesIndex breweries={breweries} favorites={favorites} onShowBrewery={handleShowBrewery} />}
+          path="/all"
+          element={
+            <BreweriesIndex
+              breweries={breweries}
+              favorites={favorites}
+              setBreweries={setBreweries}
+              onShowBrewery={handleShowBrewery}
+            />
+          }
         />
         <Route path="/breweries/:id" element={<BreweriesShowPage />} />
         <Route
           path="/favorites"
           element={<FavoritesIndex favorites={favorites} onDestroyFavorite={handleDestroyFavorite} />}
         />
-        <Route path="/nearby" element={<NearbyBreweries />} />
+        <Route path="/" element={<NearbyBreweries />} />
       </Routes>
       {/* <Modal show={isBreweriesShowVisible} onClose={handleClose}>
           <BreweriesShow brewery={currentBrewery} />
