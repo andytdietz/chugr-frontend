@@ -83,7 +83,7 @@ const NearbyBreweries = () => {
   // Function to generate directions URL
   const getDirectionsURL = (brewery) => {
     const destination = encodeURIComponent(`${brewery.latitude},${brewery.longitude}`);
-    return `https://www.google.com/maps/dir/?api=1&destination=${destination}&key=`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${destination}&key=``;
   };
 
   // Function to handle favorite click
@@ -148,7 +148,7 @@ const NearbyBreweries = () => {
                     </p>
                     <a href={getDirectionsURL(brewery)} target="_blank" rel="noopener noreferrer">
                       <img
-                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${brewery.latitude},${brewery.longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${brewery.latitude},${brewery.longitude}&key=`}
+                        src={`https://maps.googleapis.com/maps/api/staticmap?center=${brewery.latitude},${brewery.longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${brewery.latitude},${brewery.longitude}&key=``}
                         alt={`Map of ${brewery.name}`}
                         className="img-fluid"
                       />

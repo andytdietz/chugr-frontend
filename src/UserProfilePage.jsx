@@ -10,6 +10,7 @@ const UserProfileForm = ({ id }) => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [editField, setEditField] = useState(null);
 
   useEffect(() => {
     axios
@@ -22,12 +23,15 @@ const UserProfileForm = ({ id }) => {
           email: email || "",
           bio: bio || "",
         });
-        console.log("User data:", response.data);
       })
       .catch((error) => {
         setError("Failed to fetch user data");
       });
   }, [id]);
+
+  const handleEdit = (field) => {
+    setEditField(field);
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -40,7 +44,6 @@ const UserProfileForm = ({ id }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Retrieve user ID from local storage
     const userId = localStorage.getItem("user_id");
 
     axios
@@ -48,7 +51,6 @@ const UserProfileForm = ({ id }) => {
       .then((response) => {
         setSuccess(true);
         setError(null);
-        console.log("User data:", response.data);
       })
       .catch((error) => {
         setError("Failed to update user data");
@@ -57,60 +59,71 @@ const UserProfileForm = ({ id }) => {
 
   return (
     <div className="container">
-      <h2>Edit Profile</h2>
+      <h2>My Profile</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">Profile updated successfully</div>}
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name:
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            className="form-control"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          <div className="form-text">Current: {formData.name}</div>
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">Name</h5>
+            <p className="card-text">
+              {editField === "name" ? (
+                <input type="text" value={formData.name} onChange={handleChange} />
+              ) : (
+                formData.name
+              )}
+            </p>
+            <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEdit("name")}>
+              Edit
+            </button>
+          </div>
         </div>
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label">
-            Username:
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            className="form-control"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          <div className="form-text">Current: {formData.username}</div>
+
+        <div className="card mt-3">
+          <div className="card-body">
+            <h5 className="card-title">Username</h5>
+            <p className="card-text">
+              {editField === "username" ? (
+                <input type="text" value={formData.username} onChange={handleChange} />
+              ) : (
+                formData.username
+              )}
+            </p>
+            <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEdit("username")}>
+              Edit
+            </button>
+          </div>
         </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className="form-control"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <div className="form-text">Current: {formData.email}</div>
+
+        <div className="card mt-3">
+          <div className="card-body">
+            <h5 className="card-title">Email</h5>
+            <p className="card-text">
+              {editField === "email" ? (
+                <input type="email" value={formData.email} onChange={handleChange} />
+              ) : (
+                formData.email
+              )}
+            </p>
+            <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEdit("email")}>
+              Edit
+            </button>
+          </div>
         </div>
-        <div className="mb-3">
-          <label htmlFor="bio" className="form-label">
-            Bio:
-          </label>
-          <textarea id="bio" name="bio" className="form-control" value={formData.bio} onChange={handleChange} />
-          <div className="form-text">Current: {formData.bio}</div>
+
+        <div className="card mt-3">
+          <div className="card-body">
+            <h5 className="card-title">Bio</h5>
+            <p className="card-text">
+              {editField === "bio" ? <textarea value={formData.bio} onChange={handleChange} /> : formData.bio}
+            </p>
+            <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEdit("bio")}>
+              Edit
+            </button>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary">
+
+        <button type="submit" className="btn btn-primary mt-3">
           Update Profile
         </button>
       </form>
