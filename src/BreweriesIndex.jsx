@@ -7,7 +7,6 @@ export function BreweriesIndex(props) {
   const [searchFilter, setSearchFilter] = useState("");
 
   useEffect(() => {
-    // Retrieve favorited brewery IDs from localStorage on component mount
     const storedFavorites = JSON.parse(localStorage.getItem("favoritedBreweries"));
     if (storedFavorites) {
       setFavoritedBreweries(storedFavorites);
@@ -15,20 +14,34 @@ export function BreweriesIndex(props) {
   }, []);
 
   useEffect(() => {
-    // Fetch breweries data
+    fetchFavoritedBreweries();
     fetchBreweries();
-  }, []); // Empty dependency array to ensure it only runs once on mount
+  }, []);
+
+  const fetchFavoritedBreweries = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/favorites.json");
+      const favoritedIds = response.data.map((favorite) => favorite.brewery_id);
+      setFavoritedBreweries(favoritedIds);
+    } catch (error) {
+      console.error("Error fetching favorited breweries:", error);
+    }
+  };
 
   const fetchBreweries = async () => {
     try {
       const response = await axios.get("https://api.openbrewerydb.org/v1/breweries");
-      props.setBreweries(response.data); // Update parent component state with fetched breweries
+      props.setBreweries(response.data);
     } catch (error) {
       console.error("Error fetching breweries:", error);
     }
   };
 
   const handleFavoriteClick = (brewery) => {
+    if (isBreweryFavorited(brewery.id)) {
+      console.log("brewery already favorited");
+      return;
+    }
     const favoriteData = {
       brewery_id: brewery.id,
       name: brewery.name,

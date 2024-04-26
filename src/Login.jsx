@@ -14,18 +14,26 @@ export function Login() {
     event.preventDefault();
     setErrors([]);
     const params = new FormData(event.target);
+    // Show loading state or disable login button here
+
     axios
       .post("http://localhost:3000/sessions.json", params)
       .then((response) => {
         console.log(response.data);
         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
         localStorage.setItem("jwt", response.data.jwt);
+        localStorage.setItem("user_id", response.data.user_id);
         event.target.reset();
-        window.location.href = "/"; // Change this to hide a modal, redirect to a specific page, etc.
+        // Show success message or hide login form here
+        // Delay the redirection after a successful login
+        setTimeout(() => {
+          window.location.href = "/"; // Redirect to home page
+        }, 2000); // Delay for 2 seconds
       })
       .catch((error) => {
         console.log(error.response);
         setErrors(["Invalid email or password"]);
+        // Hide loading state and enable login button here
       });
   };
 

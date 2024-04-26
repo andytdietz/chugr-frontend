@@ -12,10 +12,12 @@ export function Header() {
   };
 
   const handleLogout = () => {
+    console.log("Logging out...");
     localStorage.removeItem("jwt");
+    localStorage.clear();
+    console.log("JWT token removed.");
     window.location.href = "/login";
   };
-
   return (
     <div>
       <Modal show={isSignupVisible} onClose={handleClose}>
@@ -61,6 +63,15 @@ export function Header() {
                   <li className="nav-item">
                     <Link className="nav-link" to="/all" onClick={() => setIsSignupVisible(false)}>
                       All Breweries
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to={`/users/${localStorage.user_id}`}
+                      onClick={() => setIsSignupVisible(false)}
+                    >
+                      My Profile
                     </Link>
                   </li>
                   <li className="nav-item">

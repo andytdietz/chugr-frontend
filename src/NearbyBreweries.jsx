@@ -28,6 +28,19 @@ const NearbyBreweries = () => {
       setFavoritedBreweries(storedFavorites);
     }
   }, []);
+  useEffect(() => {
+    fetchFavoritedBreweries();
+  }, []);
+
+  const fetchFavoritedBreweries = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/favorites.json");
+      const favoritedIds = response.data.map((favorite) => favorite.brewery_id);
+      setFavoritedBreweries(favoritedIds);
+    } catch (error) {
+      console.error("Error fetching favorited breweries:", error);
+    }
+  };
 
   useEffect(() => {
     // Function to fetch nearby breweries using user location
@@ -75,6 +88,10 @@ const NearbyBreweries = () => {
 
   // Function to handle favorite click
   const handleFavoriteClick = (brewery) => {
+    if (isBreweryFavorited(brewery.id)) {
+      console.log("brewery already favorited");
+      return;
+    }
     const favoriteData = {
       brewery_id: brewery.id,
       name: brewery.name,

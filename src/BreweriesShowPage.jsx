@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export function BreweriesShowPage() {
+export default function BreweriesShowPage() {
   const [brewery, setBrewery] = useState({});
   const params = useParams();
 
@@ -38,7 +38,7 @@ export function BreweriesShowPage() {
               Brewery Website
             </a>
             <Link to="/" className="btn btn-secondary">
-              Back to All Breweries
+              Back to Nearby Breweries
             </Link>
           </p>
         </div>

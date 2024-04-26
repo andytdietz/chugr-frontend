@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import { useState } from "react";
 
@@ -32,6 +33,9 @@ export function Signup() {
       <form onSubmit={handleSubmit}>
         <div>
           Name: <input name="name" type="text" />
+        </div>
+        <div>
+          Username: <input name="username" type="text" />
         </div>
         <div>
           Email: <input name="email" type="email" />
