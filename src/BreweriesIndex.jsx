@@ -31,7 +31,13 @@ export function BreweriesIndex(props) {
 
   const fetchBreweries = async () => {
     try {
-      const response = await axios.get("https://api.openbrewerydb.org/v1/breweries");
+      // Generate a random page number to fetch
+      const randomPage = Math.floor(Math.random() * 100) + 1; // Assuming there are 100 pages of breweries
+
+      // Fetch breweries from a random page
+      const response = await axios.get(`https://api.openbrewerydb.org/v1/breweries/random?size=500page=${randomPage}`);
+
+      // Set the fetched breweries in the state
       props.setBreweries(response.data);
     } catch (error) {
       console.error("Error fetching breweries:", error);

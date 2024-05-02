@@ -4,7 +4,7 @@ import { Signup } from "./Signup";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export function Header() {
+export function Header({ fetchRandomBreweries }) {
   const [isSignupVisible, setIsSignupVisible] = useState(false);
 
   const handleClose = () => {
@@ -18,6 +18,14 @@ export function Header() {
     console.log("JWT token removed.");
     window.location.href = "/login";
   };
+
+  const handleRandomBreweriesClick = () => {
+    // Call the function to fetch random breweries
+    fetchRandomBreweries();
+    // Close the modal if open
+    setIsSignupVisible(false);
+  };
+
   return (
     <div>
       <Modal show={isSignupVisible} onClose={handleClose}>
@@ -61,7 +69,7 @@ export function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/random" onClick={() => setIsSignupVisible(false)}>
+                    <Link className="nav-link" to="/random" onClick={handleRandomBreweriesClick}>
                       Random Breweries
                     </Link>
                   </li>
