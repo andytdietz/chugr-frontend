@@ -16,11 +16,13 @@ export function FavoritesIndex(props) {
 
   const getStaticMapUrl = (favorite) => {
     const { latitude, longitude } = favorite;
+    const googleMapsApiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
+
     if (!latitude || !longitude) {
       // Use a default image if latitude or longitude is null
       return "https://via.placeholder.com/400x300?text=Location+Not+Available";
     }
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=`;
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=${googleMapsApiKey}`;
   };
 
   return (

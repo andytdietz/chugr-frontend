@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export function BreweriesIndex(props) {
   const [favoritedBreweries, setFavoritedBreweries] = useState([]);
   const [searchFilter, setSearchFilter] = useState("");
-
+  const googleMapsApiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favoritedBreweries"));
     if (storedFavorites) {
@@ -75,12 +75,13 @@ export function BreweriesIndex(props) {
 
   const getStaticMapUrl = (brewery) => {
     const { latitude, longitude, address_1, city, state } = brewery;
+    console.log("Google Maps API Key:", googleMapsApiKey);
     if (latitude && longitude) {
-      return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=`;
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=${googleMapsApiKey}`;
     } else if (address_1) {
       // Use the concatenated address for the static map image if latitude or longitude is null
       const encodedAddress = encodeURIComponent(`${address_1}, ${city}, ${state}`);
-      return `https://maps.googleapis.com/maps/api/staticmap?center=${encodedAddress}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${encodedAddress}&key=`;
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${encodedAddress}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${encodedAddress}&key=${googleMapsApiKey}`;
     } else {
       // Use a default image if latitude, longitude, and address are null
       return "https://res.cloudinary.com/teepublic/image/private/s--cL7MR2EB--/c_fit,g_north_west,h_840,w_760/co_191919,e_outline:40/co_191919,e_outline:inner_fill:1/co_ffffff,e_outline:40/co_ffffff,e_outline:inner_fill:1/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg";
