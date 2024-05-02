@@ -13,8 +13,9 @@ const UserProfileForm = ({ id }) => {
   const [editField, setEditField] = useState(null);
 
   useEffect(() => {
+    const userId = localStorage.getItem("user_id");
     axios
-      .get(`http://localhost:3000/users/${id}.json`)
+      .get(`http://localhost:3000/users/${userId}.json`)
       .then((response) => {
         const { name, username, email, bio } = response.data;
         setFormData({
@@ -68,7 +69,7 @@ const UserProfileForm = ({ id }) => {
             <h5 className="card-title">Name</h5>
             <p className="card-text">
               {editField === "name" ? (
-                <input type="text" value={formData.name} onChange={handleChange} />
+                <input type="text" name="name" value={formData.name} onChange={handleChange} />
               ) : (
                 formData.name
               )}
@@ -84,7 +85,7 @@ const UserProfileForm = ({ id }) => {
             <h5 className="card-title">Username</h5>
             <p className="card-text">
               {editField === "username" ? (
-                <input type="text" value={formData.username} onChange={handleChange} />
+                <input type="text" name="username" value={formData.username} onChange={handleChange} />
               ) : (
                 formData.username
               )}
@@ -100,7 +101,7 @@ const UserProfileForm = ({ id }) => {
             <h5 className="card-title">Email</h5>
             <p className="card-text">
               {editField === "email" ? (
-                <input type="email" value={formData.email} onChange={handleChange} />
+                <input type="text" name="email" value={formData.email} onChange={handleChange} />
               ) : (
                 formData.email
               )}
@@ -110,12 +111,15 @@ const UserProfileForm = ({ id }) => {
             </button>
           </div>
         </div>
-
         <div className="card mt-3">
           <div className="card-body">
             <h5 className="card-title">Bio</h5>
             <p className="card-text">
-              {editField === "bio" ? <textarea value={formData.bio} onChange={handleChange} /> : formData.bio}
+              {editField === "bio" ? (
+                <input type="text" name="bio" value={formData.bio} onChange={handleChange} />
+              ) : (
+                formData.bio
+              )}
             </p>
             <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEdit("bio")}>
               Edit

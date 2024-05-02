@@ -61,8 +61,8 @@ export function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/all" onClick={() => setIsSignupVisible(false)}>
-                      All Breweries
+                    <Link className="nav-link" to="/random" onClick={() => setIsSignupVisible(false)}>
+                      Random Breweries
                     </Link>
                   </li>
                   <li className="nav-item">

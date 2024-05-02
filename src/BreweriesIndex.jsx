@@ -6,12 +6,13 @@ export function BreweriesIndex(props) {
   const [favoritedBreweries, setFavoritedBreweries] = useState([]);
   const [searchFilter, setSearchFilter] = useState("");
   const googleMapsApiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favoritedBreweries"));
-    if (storedFavorites) {
-      setFavoritedBreweries(storedFavorites);
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   const storedFavorites = JSON.parse(localStorage.getItem("favoritedBreweries"));
+  //   if (storedFavorites) {
+  //     setFavoritedBreweries(storedFavorites);
+  //   }
+  // }, []);
 
   useEffect(() => {
     fetchFavoritedBreweries();
@@ -94,8 +95,8 @@ export function BreweriesIndex(props) {
   };
 
   return (
-    <div>
-      <h1 className="col-12">All Breweries</h1>
+    <div className="container">
+      <h1>Random Breweries</h1>
       <p>
         Search by Brewery, City, or Type:
         <input
@@ -129,6 +130,9 @@ export function BreweriesIndex(props) {
           .map((brewery) => (
             <div key={brewery.id} className="col">
               <div className="card">
+                <h5 className="card-body">
+                  <Link to={`/breweries/${brewery.id}`}>{brewery.name}</Link>
+                </h5>
                 <a href={getDirectionsURL(brewery)} target="_blank" rel="noopener noreferrer">
                   <img
                     src={getStaticMapUrl(brewery)}
@@ -138,17 +142,12 @@ export function BreweriesIndex(props) {
                   />
                 </a>
                 <div className="card-body">
-                  <h5 className="card-title">{brewery.name}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">
                     {brewery.city}, {brewery.state}
                   </h6>
-                  <Link
-                    to={`/breweries/${brewery.id}`}
-                    className="btn btn-primary me-2"
-                    onClick={() => props.onShowBrewery(brewery)}
-                  >
-                    More Info
-                  </Link>
+                  <a href={brewery.website_url} className="btn btn-primary me-2">
+                    Brewery Website
+                  </a>
                   <button
                     className={`btn btn-secondary bg-transparent border-0`}
                     onClick={() => handleFavoriteClick(brewery)}
