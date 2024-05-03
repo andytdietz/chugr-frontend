@@ -7,6 +7,7 @@ const UserProfileForm = ({ id }) => {
     username: "",
     email: "",
     bio: "",
+    profile_picture: null, // New state for profile picture
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -17,12 +18,14 @@ const UserProfileForm = ({ id }) => {
     axios
       .get(`http://localhost:3000/users/${userId}.json`)
       .then((response) => {
-        const { name, username, email, bio } = response.data;
+        const { name, username, email, bio, profile_picture_url } = response.data;
+        console.log("Profile Picture URL:", profile_picture_url); // Log the profile picture URL
         setFormData({
           name: name || "",
           username: username || "",
           email: email || "",
           bio: bio || "",
+          profile_picture: profile_picture_url ? `${profile_picture_url}?t=${new Date().getTime()}` : "",
         });
       })
       .catch((error) => {
@@ -35,29 +38,51 @@ const UserProfileForm = ({ id }) => {
   };
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, files } = event.target;
+    // If it's a file input, set the file in formData
+    if (name === "profile_picture") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0], // Assuming single file upload
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userId = localStorage.getItem("user_id");
+    const userData = new FormData();
 
-    axios
-      .patch(`http://localhost:3000/users/${userId}.json`, formData)
-      .then((response) => {
-        setSuccess(true);
-        setError(null);
-      })
-      .catch((error) => {
-        setError("Failed to update user data");
+    // Iterate over formData object and append each key-value pair to userData
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "profile_picture" && value !== null) {
+        // Append file if it's a profile picture
+        userData.append(key, value);
+      } else {
+        // Append other fields as strings
+        userData.append(`user[${key}]`, value);
+      }
+    });
+    console.log("Form Data:", formData);
+
+    try {
+      const response = await axios.patch(`http://localhost:3000/users/${userId}.json`, userData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+      setSuccess(true);
+      setError(null);
+    } catch (error) {
+      setError("Failed to update user data");
+    }
   };
-
   return (
     <div className="container">
       <h2>My Profile</h2>
@@ -68,6 +93,9 @@ const UserProfileForm = ({ id }) => {
           <div className="card-body">
             <h5 className="card-title">Name</h5>
             <p className="card-text">
+              {formData.profile_picture && (
+                <img src={formData.profile_picture} alt="Profile" style={{ maxWidth: "200px" }} />
+              )}
               {editField === "name" ? (
                 <input type="text" name="name" value={formData.name} onChange={handleChange} />
               ) : (
@@ -126,7 +154,22 @@ const UserProfileForm = ({ id }) => {
             </button>
           </div>
         </div>
-
+        <div className="card mt-3">
+          <div className="card-body">
+            <h5 className="card-title">Profile Picture</h5>
+            <p className="card-text">
+              {formData.profile_picture && (
+                <img
+                  src={formData.profile_picture}
+                  alt="Profile Picture"
+                  className="rounded-circle"
+                  style={{ maxWidth: "200px" }}
+                />
+              )}
+              <input type="file" name="profile_picture" onChange={handleChange} />
+            </p>
+          </div>
+        </div>
         <button type="submit" className="btn btn-primary mt-3">
           Update Profile
         </button>
