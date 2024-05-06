@@ -40,34 +40,45 @@ export function FavoritesIndex(props) {
         {props.favorites.map((favorite) => (
           <div key={favorite.id} className="col">
             <div className="card">
-              <h5 className="card-body">
-                <Link to={`/breweries/${favorite.brewery_id}`} className="text-decoration-none stretched-link">
-                  {favorite.name}
-                </Link>
-              </h5>
-              <a href={getDirectionsURL(favorite)} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={getStaticMapUrl(favorite)}
-                  className="card-img-top"
-                  alt={`Map of ${favorite.name}`}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-              </a>
               <div className="card-body">
-                <p className="card-text">
-                  {favorite.city}, {favorite.state}
-                </p>
-                <p className="card-text">
-                  Type: <span style={{ textTransform: "capitalize" }}>{favorite.brewery_type}</span>
-                </p>
-              </div>
-              <div className="card-footer d-flex justify-content-between align-items-center">
-                <a href={favorite.website_url} className="btn btn-primary btn-sm me-2">
-                  Brewery Website
+                <h5>
+                  <Link to={`/breweries/${favorite.brewery_id}`} className="text-decoration-none">
+                    {favorite.name}
+                  </Link>
+                </h5>
+                <a href={getDirectionsURL(favorite)} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={getStaticMapUrl(favorite)}
+                    className="card-img-top"
+                    alt={`Map of ${favorite.name}`}
+                    style={{ height: "200px", objectFit: "cover" }}
+                  />
                 </a>
-                <button onClick={() => handleClick(favorite.id)} className="btn btn-danger btn-sm">
-                  Remove Favorite
-                </button>
+                <div className="card-body">
+                  <p className="card-text">
+                    {favorite.city}, {favorite.state}
+                  </p>
+                  <p className="card-text">
+                    Type: <span style={{ textTransform: "capitalize" }}>{favorite.brewery_type}</span>
+                  </p>
+                </div>
+                <div className="card-footer d-flex justify-content-between align-items-center">
+                  <div>
+                    <a
+                      href={favorite.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary btn-sm me-2"
+                    >
+                      Brewery Website
+                    </a>
+                  </div>
+                  <div>
+                    <button onClick={() => handleClick(favorite.id)} className="btn btn-danger btn-sm">
+                      Remove Favorite
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

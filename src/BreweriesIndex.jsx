@@ -151,7 +151,12 @@ export function BreweriesIndex(props) {
                   <h6 className="card-subtitle mb-2 text-muted">
                     {brewery.city}, {brewery.state}
                   </h6>
-                  <a href={brewery.website_url} className="btn btn-primary me-2">
+                  <a
+                    href={brewery.website_url}
+                    target="_blank"
+                    rel="noopenernoreferrer"
+                    className="btn btn-primary me-2"
+                  >
                     Brewery Website
                   </a>
                   <button

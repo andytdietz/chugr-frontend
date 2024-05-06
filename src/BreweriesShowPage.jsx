@@ -147,7 +147,7 @@ export default function BreweriesShowPage() {
             Type: <span style={{ textTransform: "capitalize" }}>{brewery.brewery_type}</span>
           </p>
           <p>
-            <a href={brewery.website_url} className="btn btn-primary me-2">
+            <a href={brewery.website_url} target="_blank" rel="noopenernoreferrer" className="btn btn-primary me-2">
               Brewery Website
             </a>
             <Link to="/" className="btn btn-secondary">

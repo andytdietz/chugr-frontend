@@ -153,7 +153,12 @@ const NearbyBreweries = () => {
                         className="img-fluid"
                       />
                     </a>
-                    <a href={brewery.website_url} className="btn btn-primary me-2">
+                    <a
+                      href={brewery.website_url}
+                      target="_blank"
+                      rel="noopenernoreferrer"
+                      className="btn btn-primary me-2"
+                    >
                       Brewery Website
                     </a>
                     <button
