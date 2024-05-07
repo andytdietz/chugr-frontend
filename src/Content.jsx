@@ -38,7 +38,6 @@ export function Content() {
     axios
       .delete(`http://localhost:3000/favorites/${favoriteId}`)
       .then(() => {
-        // Remove the deleted favorite from the favorites list
         setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.id !== favoriteId));
       })
       .catch((error) => console.error("Error deleting favorite:", error));
@@ -60,7 +59,6 @@ export function Content() {
 
         <Route path="/" element={<NearbyBreweries />} />
         <Route path="/breweries/:id" element={<BreweriesShowPage />} />
-        {/* Route for user profile with user ID */}
         <Route path="/users/:id" element={<UserProfilePage />} />
       </Routes>
     </main>

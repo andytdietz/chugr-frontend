@@ -180,11 +180,11 @@ const UserProfileForm = ({ id, authenticityToken }) => {
         <div className="card mt-3">
           <div className="card-body">
             <h5 className="card-title">Profile Picture</h5>
+            {userData.profile_picture_url && <img src={userData.profile_picture_url} alt="Profile" />}
             <p className="card-text">
               <input type="file" name="profile_picture" onChange={handleChange} />
             </p>
             {/* Display the profile picture if available */}
-            {userData.profile_picture_url && <img src={userData.profile_picture_url} alt="Profile" />}
           </div>
         </div>
 

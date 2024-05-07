@@ -26,7 +26,6 @@ export default function BreweriesShowPage() {
         const commentsResponse = await axios.get("http://localhost:3000/comments");
         console.log(commentsResponse.data);
 
-        // Assuming commentsResponse.data is an array of comments
         const filteredComments = commentsResponse.data.filter((comment) => {
           return comment.brewery_id === params.id;
         });
@@ -105,10 +104,9 @@ export default function BreweriesShowPage() {
       .post("http://localhost:3000/favorites.json", favoriteData)
       .then((response) => {
         console.log("Favorite Created:", response.data);
-        // Add the favorited brewery ID to the list
         const updatedFavorites = [...favoritedBreweries, brewery.id];
         setFavoritedBreweries(updatedFavorites);
-        // Update localStorage with the updated list of favorited brewery IDs
+
         localStorage.setItem("favoritedBreweries", JSON.stringify(updatedFavorites));
       })
       .catch((error) => {
@@ -125,11 +123,9 @@ export default function BreweriesShowPage() {
     if (latitude && longitude) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=${googleMapsApiKey}`;
     } else if (address_1) {
-      // Use the concatenated address for the static map image if latitude or longitude is null
       const encodedAddress = encodeURIComponent(`${address_1}, ${city}, ${state}`);
       return `https://maps.googleapis.com/maps/api/staticmap?center=${encodedAddress}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${encodedAddress}&key=${googleMapsApiKey}`;
     } else {
-      // Use a default image if latitude, longitude, and address are null
       return "https://res.cloudinary.com/teepublic/image/private/s--cL7MR2EB--/c_fit,g_north_west,h_840,w_760/co_191919,e_outline:40/co_191919,e_outline:inner_fill:1/co_ffffff,e_outline:40/co_ffffff,e_outline:inner_fill:1/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg";
     }
   };
@@ -204,11 +200,10 @@ export default function BreweriesShowPage() {
           {comments.map((comment) => (
             <li key={comment.id} className="list-group-item d-flex justify-content-between align-items-start">
               <div>
-                {/* Add null checks to prevent accessing properties of undefined */}
                 <strong>{comment.user && comment.user.username}</strong>
                 <p>{comment.content}</p>
               </div>
-              {/* Add null check to prevent accessing user_id of undefined */}
+
               {comment.user && comment.user_id === parseInt(localStorage.getItem("user_id")) && (
                 <button className="btn btn-danger" onClick={() => handleDeleteComment(comment.id)}>
                   Delete

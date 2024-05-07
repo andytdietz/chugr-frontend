@@ -31,13 +31,10 @@ export function BreweriesIndex(props) {
 
   const fetchBreweries = async () => {
     try {
-      // Generate a random page number to fetch
-      const randomPage = Math.floor(Math.random() * 100) + 1; // Assuming there are 100 pages of breweries
+      const randomPage = Math.floor(Math.random() * 100) + 1; //
 
-      // Fetch breweries from a random page
       const response = await axios.get(`https://api.openbrewerydb.org/v1/breweries/random?size=500page=${randomPage}`);
 
-      // Set the fetched breweries in the state
       props.setBreweries(response.data);
     } catch (error) {
       console.error("Error fetching breweries:", error);
@@ -65,10 +62,10 @@ export function BreweriesIndex(props) {
       .post("http://localhost:3000/favorites.json", favoriteData)
       .then((response) => {
         console.log("Favorite Created:", response.data);
-        // Add the favorited brewery ID to the list
+
         const updatedFavorites = [...favoritedBreweries, brewery.id];
         setFavoritedBreweries(updatedFavorites);
-        // Update localStorage with the updated list of favorited brewery IDs
+
         localStorage.setItem("favoritedBreweries", JSON.stringify(updatedFavorites));
       })
       .catch((error) => {
@@ -86,11 +83,9 @@ export function BreweriesIndex(props) {
     if (latitude && longitude) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${latitude},${longitude}&key=${googleMapsApiKey}`;
     } else if (address_1) {
-      // Use the concatenated address for the static map image if latitude or longitude is null
       const encodedAddress = encodeURIComponent(`${address_1}, ${city}, ${state}`);
       return `https://maps.googleapis.com/maps/api/staticmap?center=${encodedAddress}&zoom=15&size=400x300&markers=color:red%7Clabel:B%7C${encodedAddress}&key=${googleMapsApiKey}`;
     } else {
-      // Use a default image if latitude, longitude, and address are null
       return "https://res.cloudinary.com/teepublic/image/private/s--cL7MR2EB--/c_fit,g_north_west,h_840,w_760/co_191919,e_outline:40/co_191919,e_outline:inner_fill:1/co_ffffff,e_outline:40/co_ffffff,e_outline:inner_fill:1/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/t_watermark_lock/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1497200957/production/designs/1660854_1.jpg";
     }
   };

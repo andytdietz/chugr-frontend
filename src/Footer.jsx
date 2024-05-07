@@ -5,8 +5,8 @@ export function Footer() {
   return (
     <footer
       style={{
-        bottom: "20px", // Adjust this value to make it closer to the bottom
-        left: "20px", // Adjust this value to make it closer to the left
+        bottom: "20px",
+        left: "20px",
         display: "flex",
         alignItems: "center",
       }}

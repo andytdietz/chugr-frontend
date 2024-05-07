@@ -20,9 +20,7 @@ export function Header({ fetchRandomBreweries }) {
   };
 
   const handleRandomBreweriesClick = () => {
-    // Call the function to fetch random breweries
     fetchRandomBreweries();
-    // Close the modal if open
     setIsSignupVisible(false);
   };
 
