@@ -8,9 +8,20 @@ export default function BreweriesShowPage() {
   const [brewery, setBrewery] = useState({});
   const [comments, setComments] = useState([]);
   const [newCommentContent, setNewCommentContent] = useState("");
+  const [reviews, setReviews] = useState("");
+  const [newReviewRating, setNewReviewRating] = useState("");
   const [favoritedBreweries, setFavoritedBreweries] = useState([]);
   const googleMapsApiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
   const params = useParams();
+  const averageRating = () => {
+    if (reviews.length === 0) {
+      return 0;
+    }
+    const sumOfRatings = reviews.reduce((total, review) => total + review.rating, 0);
+    return (sumOfRatings / reviews.length).toFixed(1);
+  };
+
+  const totalReviews = reviews.length;
 
   useEffect(() => {
     const fetchBrewery = async () => {
@@ -36,8 +47,24 @@ export default function BreweriesShowPage() {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const reviewsResponse = await axios.get("http://localhost:3000/reviews");
+        console.log(reviewsResponse.data);
+
+        const filteredReviews = reviewsResponse.data.filter((review) => {
+          return review.brewery_id === params.id;
+        });
+
+        setReviews(filteredReviews);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
     fetchBrewery();
     fetchComments();
+    fetchReviews();
   }, [params.id]);
 
   const handleSubmitComment = async (event) => {
@@ -130,6 +157,26 @@ export default function BreweriesShowPage() {
     }
   };
 
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      console.error("User ID not found in local storage");
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:3000/reviews", {
+        rating: newReviewRating,
+        user_id: userId,
+        brewery_id: params.id,
+      });
+      setReviews([...reviews, response.data]);
+      setNewReviewRating("");
+    } catch (error) {
+      console.error("Error creating review:", error);
+    }
+  };
+
   return (
     <div id="breweries-show" className="container mt-4">
       <div className="row">
@@ -141,6 +188,9 @@ export default function BreweriesShowPage() {
           </h3>
           <p>
             Type: <span style={{ textTransform: "capitalize" }}>{brewery.brewery_type}</span>
+          </p>
+          <p>
+            Average Rating: {averageRating()} ({totalReviews} reviews)
           </p>
           <p>
             <a href={brewery.website_url} target="_blank" rel="noopenernoreferrer" className="btn btn-primary me-2">
@@ -176,6 +226,29 @@ export default function BreweriesShowPage() {
             ></textarea>
             <button type="submit" className="btn btn-primary mt-2" onClick={handleSubmitComment}>
               Post Comment
+            </button>
+          </div>
+          <div className="mb-3">
+            {/* Add a Review form */}
+            <label htmlFor="new-review" className="form-label">
+              Add a Review
+            </label>
+            <select
+              className="form-control"
+              id="new-review"
+              value={newReviewRating}
+              onChange={(event) => setNewReviewRating(event.target.value)}
+              required
+            >
+              <option value="">Select Rating</option>
+              <option value="1">1 - Very Bad</option>
+              <option value="2">2 - Bad</option>
+              <option value="3">3 - Okay</option>
+              <option value="4">4 - Good</option>
+              <option value="5">5 - Excellent</option>
+            </select>
+            <button type="submit" className="btn btn-primary mt-2" onClick={handleSubmitReview}>
+              Post Review
             </button>
           </div>
         </div>
